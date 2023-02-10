@@ -37,16 +37,6 @@ namespace TP3console.Models.EntityFramework
                 entity.HasKey(e => new { e.Film, e.Utilisateur })
                     .HasName("pk_avis");
 
-                entity.ToTable("avis");
-
-                entity.Property(e => e.Film).HasColumnName("film");
-
-                entity.Property(e => e.Utilisateur).HasColumnName("utilisateur");
-
-                entity.Property(e => e.Avis).HasColumnName("avis");
-
-                entity.Property(e => e.Note).HasColumnName("note");
-
                 entity.HasOne(d => d.FilmNavigation)
                     .WithMany(p => p.Avis)
                     .HasForeignKey(d => d.Film)
@@ -60,57 +50,13 @@ namespace TP3console.Models.EntityFramework
                     .HasConstraintName("fk_avis_utilisateur");
             });
 
-            modelBuilder.Entity<Categorie>(entity =>
-            {
-                entity.ToTable("categorie");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Description).HasColumnName("description");
-
-                entity.Property(e => e.Nom)
-                    .HasMaxLength(50)
-                    .HasColumnName("nom");
-            });
-
             modelBuilder.Entity<Film>(entity =>
             {
-                entity.ToTable("film");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Categorie).HasColumnName("categorie");
-
-                entity.Property(e => e.Description).HasColumnName("description");
-
-                entity.Property(e => e.Nom)
-                    .HasMaxLength(50)
-                    .HasColumnName("nom");
-
                 entity.HasOne(d => d.CategorieNavigation)
                     .WithMany(p => p.Films)
                     .HasForeignKey(d => d.Categorie)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_film_categorie");
-            });
-
-            modelBuilder.Entity<Utilisateur>(entity =>
-            {
-                entity.ToTable("utilisateur");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(100)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Login)
-                    .HasMaxLength(50)
-                    .HasColumnName("login");
-
-                entity.Property(e => e.Pwd)
-                    .HasMaxLength(50)
-                    .HasColumnName("pwd");
             });
 
             OnModelCreatingPartial(modelBuilder);
