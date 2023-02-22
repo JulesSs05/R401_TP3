@@ -102,7 +102,7 @@ namespace TP3console
 
             //---------------------------------------------------------------------------------------------
 
-            using (var ctx = new FilmsDBContext())
+            /*using (var ctx = new FilmsDBContext())
             {
                 //Chargement de la catégorie Action
                 Categorie categorieAction = ctx.Categories.First(c => c.Nom == "Action");
@@ -113,6 +113,40 @@ namespace TP3console
                 {
                     Console.WriteLine(film.Nom);
                 }
+            }*/
+
+            //---------------------------------------------------------------------------------------------
+
+            GetEmail();
+            Console.ReadKey();
+        }
+        public static void Exo2Q1()
+        {
+            var ctx = new FilmsDBContext();
+            foreach (var film in ctx.Films)
+            {
+                Console.WriteLine(film.ToString());
+            }
+        }
+
+        //Autre possibilité :
+        public static void Exo2Q1Bis()
+        {
+            var ctx = new FilmsDBContext();
+            //Pour que cela marche, il faut que la requête envoie les mêmes noms de colonnes que les classes c#.
+            var films = ctx.Films.FromSqlRaw("SELECT * FROM film");
+            foreach (var film in films)
+            {
+                Console.WriteLine(film.ToString());
+            }
+        }
+
+        public static void GetEmail()
+        {
+            var ctx = new FilmsDBContext();
+            foreach (var utilisateur in ctx.Utilisateurs)
+            {
+                Console.WriteLine(utilisateur.Email);
             }
         }
     }
