@@ -117,7 +117,7 @@ namespace TP3console
 
             //---------------------------------------------------------------------------------------------
 
-            GetEmail();
+            GetNoteMaxUser();
             Console.ReadKey();
         }
         public static void Exo2Q1()
@@ -147,6 +147,62 @@ namespace TP3console
             foreach (var utilisateur in ctx.Utilisateurs)
             {
                 Console.WriteLine(utilisateur.Email);
+            }
+        }
+        public static void GetLoginAsc()
+        {
+            var ctx = new FilmsDBContext();
+            foreach (var utilisateur in ctx.Utilisateurs.OrderBy(c => c.Login))
+            {
+                Console.WriteLine(utilisateur.Login);
+            }
+        }
+        public static void GetFilmActionCat()
+        {
+            var ctx = new FilmsDBContext();
+            //Chargement de la catégorie Action
+            Categorie categorieAction = ctx.Categories.First(c => c.Nom == "Action");
+            //Chargement des films de la catégorie Action.
+            foreach (var film in ctx.Films.Where(f => f.CategorieNavigation.Nom == categorieAction.Nom).ToList())
+            {
+                Console.WriteLine(film.Nom + "=> Id : " + film.Id);
+            }
+        }
+        public static void GetCategoryCount()
+        {
+            var ctx = new FilmsDBContext();
+            Console.WriteLine(ctx.Categories.Count());
+        }
+        public static void GetNoteMin()
+        {
+            var ctx = new FilmsDBContext();
+            Console.WriteLine(Math.Round(ctx.Avis.Min(a => a.Note), 2));
+        }
+        public static void GetFilmBeginLe()
+        {
+            var ctx = new FilmsDBContext();
+            foreach (var film in ctx.Films.Where(f => f.Nom.ToUpper().StartsWith("lE".ToUpper())))
+            {
+                Console.WriteLine(film.Nom);
+            }
+        }
+        public static void GetNoteAvgPulpFiction()
+        {
+            var ctx = new FilmsDBContext();
+            Decimal average = ctx.Avis.Where(f => f.FilmNavigation.Nom.ToUpper() == "Pulp Fiction".ToUpper()).Average(x => x.Note);
+            Console.WriteLine(Math.Round(average,2));
+        }
+        public static void GetNoteMaxUser()
+        {
+            var ctx = new FilmsDBContext();
+            Decimal noteMax = ctx.Avis.Max(c => c.Note);
+
+            foreach (var avis in ctx.Avis.Where(a => a.Note == noteMax))
+            {
+                foreach (var user in ctx.Utilisateurs.Where(u => u.Id == avis.Utilisateur))
+                {
+                    Console.WriteLine(user.Login);
+                }
             }
         }
     }
